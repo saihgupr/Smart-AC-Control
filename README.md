@@ -209,8 +209,3 @@ If you made it this far — congrats, your dumb AC is now a **smart climate-cont
 
 > Don’t forget to share your own wiring diagram or code if you improve it. This project is weirdly satisfying, and way cheaper than buying a "smart" air conditioner.
 
----
-
-## License
-
-MIT License — feel free to copy, remix, or improve!
