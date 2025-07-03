@@ -1,0 +1,36 @@
+climate:
+  - platform: generic_thermostat
+    name: Air Conditioner
+    heater: switch.air_conditioner
+    target_sensor: sensor.nodemcu_temperature
+    precision: 0.5
+    ac_mode: true
+    cold_tolerance: 0.5
+    hot_tolerance: 0.5
+    min_cycle_duration:
+      minutes: 1
+
+switch:
+# Air Conditioner
+  - platform: template
+    switches:
+      air_conditioner:
+        value_template: "{{ states('binary_sensor.air_conditioner') }}"
+        friendly_name: "Air Condtioner"
+        icon_template: mdi:air-filter
+        turn_on:
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.air_conditioner
+                state: 'on'
+          - service: button.press
+            data:
+              entity_id: button.air_conditioner_on
+        turn_off:
+          - condition: state
+            entity_id: binary_sensor.air_conditioner
+            state: 'on'
+          - service: button.press
+            data:
+              entity_id: button.air_conditioner_off 
