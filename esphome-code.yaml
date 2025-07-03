@@ -1,0 +1,101 @@
+esphome:
+  name: wemos-5
+  comment: A/C Wemos
+
+esp8266:
+  board: d1_mini
+
+logger:
+
+api:
+
+web_server:
+
+ota:
+  platform: esphome
+
+mqtt: !secret mqtt
+
+switch:
+  - platform: gpio
+    pin: GPIO2
+    id: nodemcu_blue
+    inverted: True
+    restore_mode: ALWAYS_OFF
+    
+  - platform: template
+    name: "Wemos LED"
+    id: nodemcu_led
+    turn_on_action:
+    - switch.turn_on: nodemcu_blue
+    turn_off_action:
+    - switch.turn_off: nodemcu_blue
+
+wifi:
+  ssid: !secret ssid
+  password: !secret wifi
+  manual_ip:
+    static_ip: 192.168.1.134
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+
+remote_transmitter:
+  pin: D2
+  carrier_duty_percent: 50%
+
+button:
+
+  - platform: template
+    name: Air Conditioner Cool Mode
+    id: my_button_ac_cool_mode
+    icon: "mdi:emoticon-outline"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF508
+          command: 0xF609
+          command_repeats: 1
+
+  - platform: template
+    name: Air Conditioner On
+    id: my_button_ac_on
+    icon: "mdi:emoticon-outline"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF508
+          command: 0xEE11
+          command_repeats: 1
+      - delay: 3s
+      - remote_transmitter.transmit_nec:
+          address: 0xF508
+          command: 0xF609
+          command_repeats: 1
+
+  - platform: template
+    name: Air Conditioner Off
+    id: my_button_ac_off
+    icon: "mdi:emoticon-outline"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF508
+          command: 0xEE11
+          command_repeats: 1
+
+  - platform: template
+    name: Air Conditioner Up
+    id: my_button_ac_up
+    icon: "mdi:emoticon-outline"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF508
+          command: 0xF10E
+          command_repeats: 1
+
+  - platform: template
+    name: Air Conditioner Down
+    id: my_button_ac_down
+    icon: "mdi:emoticon-outline"
+    on_press:
+      - remote_transmitter.transmit_nec:
+          address: 0xF508
+          command: 0xF20D
+          command_repeats: 1
